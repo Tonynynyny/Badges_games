@@ -155,3 +155,238 @@ input:focus-visible {
         text-align: center;
     }
 }
+
+/* =========================================================
+ *  COMPOSANTS PARTAGÉS (utilisés par jeu.php, classement.php, admin.php)
+ * ========================================================= */
+
+/* ---------- 7. Boutons ---------- */
+.bouton {
+    display: inline-block;
+    padding: 0.8rem 1.6rem;
+    border: none;
+    border-radius: var(--rayon);
+    background: var(--accent);
+    color: var(--fond);
+    font: inherit;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+}
+
+.bouton:hover {
+    background: var(--accent-fonce);
+}
+
+.bouton:active {
+    transform: scale(0.97);
+}
+
+.bouton:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.bouton-secondaire {
+    background: transparent;
+    color: var(--texte);
+    border: 2px solid var(--bordure);
+}
+
+.bouton-secondaire:hover {
+    background: var(--bordure);
+}
+
+.bouton-danger {
+    background: var(--danger);
+    color: #fff;
+}
+
+.bouton-danger:hover {
+    background: #e04848;
+}
+
+/* ---------- 8. Cartes et formulaires ---------- */
+.carte {
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+    background: var(--fond-carte);
+    border: 1px solid var(--bordure);
+    border-radius: var(--rayon);
+}
+
+label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-weight: 600;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="number"] {
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 1rem;
+    padding: 0.8rem 1rem;
+    background: var(--fond);
+    color: var(--texte);
+    border: 2px solid var(--bordure);
+    border-radius: var(--rayon);
+    font: inherit;
+}
+
+input:focus {
+    border-color: var(--accent);
+}
+
+/* ---------- 9. Messages (succès / erreur) ---------- */
+.message {
+    margin-bottom: 1.5rem;
+    padding: 1rem 1.25rem;
+    border-left: 5px solid;
+    border-radius: var(--rayon);
+}
+
+.message-succes {
+    background: rgba(46, 230, 166, 0.1);
+    border-color: var(--accent);
+}
+
+.message-erreur {
+    background: rgba(255, 92, 92, 0.1);
+    border-color: var(--danger);
+}
+
+/* ---------- 10. Tableaux (classement, historique, admin) ---------- */
+.tableau-conteneur {
+    overflow-x: auto;           /* le tableau défile au lieu de casser la page sur mobile */
+}
+
+.tableau {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--fond-carte);
+    border-radius: var(--rayon);
+    overflow: hidden;
+}
+
+.tableau th,
+.tableau td {
+    padding: 0.85rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--bordure);
+}
+
+.tableau th {
+    background: var(--bordure);
+    color: var(--texte-doux);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.tableau tbody tr:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.tableau tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.tableau .nombre {
+    text-align: right;
+    font-family: var(--police-mono);
+}
+
+/* Podium du classement : or, argent, bronze */
+.rang {
+    width: 4rem;
+    font-family: var(--police-mono);
+    font-weight: 700;
+}
+
+.rang-1 { background: rgba(255, 215, 0, 0.07); }
+.rang-1 .rang { color: #ffd700; }
+.rang-2 .rang { color: #c0c0c0; }
+.rang-3 .rang { color: #cd7f32; }
+
+.vide {
+    padding: 2rem;
+    text-align: center;
+    color: var(--texte-doux);
+}
+
+/* ---------- 11. Badges colorés ---------- */
+.rangee-badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.badge {
+    --couleur-badge: var(--texte-doux);   /* couleur par défaut si aucune classe badge-X */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 4.5rem;
+    height: 4.5rem;
+    border: 3px solid rgba(255, 255, 255, 0.25);
+    border-radius: 50%;
+    background: var(--couleur-badge);
+    box-shadow: 0 0 12px var(--couleur-badge);
+    color: var(--fond);
+    font-family: var(--police-mono);
+    font-size: 1.25rem;
+    font-weight: 700;
+    user-select: none;
+}
+
+button.badge {
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+button.badge:hover { transform: scale(1.08); }
+button.badge:active { transform: scale(0.95); }
+
+.badge.selectionne {
+    outline: 4px solid var(--texte);
+    outline-offset: 3px;
+}
+
+.badge-petit {                  /* pour l'historique des essais */
+    width: 2rem;
+    height: 2rem;
+    border-width: 2px;
+    box-shadow: none;
+    font-size: 0.85rem;
+}
+
+/* Une couleur par code_badge (de 1 à 6, comme prévu dans le cahier des charges) */
+.badge-1 { --couleur-badge: #ff4d4d; }   /* rouge  */
+.badge-2 { --couleur-badge: #4da6ff; }   /* bleu   */
+.badge-3 { --couleur-badge: #ffd84d; }   /* jaune  */
+.badge-4 { --couleur-badge: #4dff88; }   /* vert   */
+.badge-5 { --couleur-badge: #c77dff; }   /* violet */
+.badge-6 { --couleur-badge: #ff9f43; }   /* orange */
+
+/* ---------- 12. Petits écrans : composants ---------- */
+@media (max-width: 600px) {
+    .badge:not(.badge-petit) {
+        width: 3.5rem;
+        height: 3.5rem;
+        font-size: 1rem;
+    }
+
+    .tableau th,
+    .tableau td {
+        padding: 0.6rem 0.5rem;
+    }
+
+    .bouton {
+        width: 100%;
+        text-align: center;
+    }
+}
