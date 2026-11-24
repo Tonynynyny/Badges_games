@@ -34,4 +34,4 @@
 
 
 -- TODO 5 : Insérer un jeu de données initial de 4 à 6 badges dans la table `badges`
--- Exemple de codes attendus : 'BADGE_ROUGE', 'BADGE_BLEU', 'BADGE_VERT', 'BADGE_JAUNE'
+-- Exemple de codes attendus : 'BADGE_ROUGE', 'BADGE_BLEU', 'BADGE_VERT', 'BADGE_JAUNE' OU tout simple 1,2,3,4 chaque couleur = un numero, on garde la couleir pour IRL
