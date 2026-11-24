@@ -3,5 +3,155 @@
  *  Aucune ressource externe : fonctionne sans Internet
  * ========================================================= */
 
+/* ---------- 1. Variables : on change une couleur ici, elle change partout ---------- */
+:root {
+    --fond: #0d1117;
+    --fond-carte: #161b22;
+    --bordure: #30363d;
+    --texte: #e6edf3;
+    --texte-doux: #8b949e;
+    --accent: #2ee6a6;          /* vert « terminal » : couleur principale */
+    --accent-fonce: #1fb985;
+    --danger: #ff5c5c;
+    --rayon: 10px;
+    --largeur-max: 960px;
+    --police: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    --police-mono: ui-monospace, Consolas, "Courier New", monospace;
+}
 
- 
+/* ---------- 2. Base ---------- */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;              /* colle le pied de page en bas, même si la page est courte */
+    flex-direction: column;
+    background: var(--fond);
+    color: var(--texte);
+    font-family: var(--police);
+    font-size: 1.125rem;
+    line-height: 1.5;
+}
+
+h1, h2, h3 {
+    margin: 0 0 1rem;
+    line-height: 1.2;
+}
+
+h1 {
+    font-size: 2rem;
+}
+
+a {
+    color: var(--accent);
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+}
+
+/* ---------- 3. En-tête ---------- */
+.entete {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    background: var(--fond-carte);
+    border-bottom: 1px solid var(--bordure);
+}
+
+.logo {
+    font-family: var(--police-mono);
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.menu {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.menu a {
+    padding: 0.6rem 1.1rem;
+    border-radius: var(--rayon);
+    color: var(--texte);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.menu a:hover {
+    background: var(--bordure);
+}
+
+.menu a.actif {
+    background: var(--accent);
+    color: var(--fond);
+}
+
+/* ---------- 4. Contenu central ---------- */
+.contenu {
+    flex: 1;                    /* prend toute la place libre entre l'en-tête et le pied */
+    width: 100%;
+    max-width: var(--largeur-max);
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+}
+
+/* ---------- 5. Pied de page ---------- */
+.pied {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--bordure);
+    color: var(--texte-doux);
+    font-size: 0.875rem;
+}
+
+.pied p {
+    margin: 0;
+}
+
+.lien-discret {
+    color: var(--texte-doux);
+    font-size: 0.8rem;
+    text-decoration: none;
+    opacity: 0.6;
+}
+
+.lien-discret:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
+
+/* ---------- 6. Petits écrans (téléphone, petite tablette) ---------- */
+@media (max-width: 600px) {
+    .entete {
+        flex-direction: column;
+    }
+
+    .contenu {
+        padding: 1.25rem 1rem;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    .pied {
+        flex-direction: column;
+        text-align: center;
+    }
+}
