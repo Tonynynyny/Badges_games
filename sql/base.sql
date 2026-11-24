@@ -50,3 +50,10 @@ INSERT INTO badges (code_badge, nom) VALUES
   ('2', 'Badge 2'),
   ('3', 'Badge 3'),
   ('4', 'Badge 4');
+
+CREATE TABLE IF NOT EXISTS administrateurs (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    identifiant VARCHAR(100) NOT NULL UNIQUE,
+    mot_de_passe VARCHAR(255) NOT NULL,
+    date_creation DATETIME DEFAULT CURRENT_TIMESTAMP
+);
