@@ -115,6 +115,31 @@ function recupererClassement(PDO $pdo, int$limite = 10): array
 }
 
 /**
+ * Récupère toutes les parties enregistrées dans la BDD.
+ * Utilisée notamment par l'espace animateur.
+ *
+ * @param PDO $pdo Instance de connexion à la BDD
+ * @return array Liste de toutes les parties
+ */
+function recupererToutesLesParties(PDO $pdo): array
+{
+    $sql = "SELECT
+                id,
+                nom_equipe,
+                statut,
+                combinaison_secrete,
+                date_debut,
+                date_fin,
+                temps_secondes
+            FROM parties
+            ORDER BY date_debut DESC";
+
+    $requete = $pdo->query($sql);
+
+    return $requete->fetchAll(PDO::FETCH_ASSOC);
+}
+
+/**
  * Fonctions réservées à admin.php : modifie manuellement la combinaison secrète d'une partie
  * ou réinitialise l'historique des parties.
  *
