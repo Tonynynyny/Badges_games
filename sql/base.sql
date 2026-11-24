@@ -11,7 +11,7 @@ USE badges_game;
 
 -- TODO 2 : Table badges
 -- Pas de couleur : c'est l'apparence du badge physique, pas du code.
--- code_badge : 1, 2, 3, 4 maintenant, UID RFID plus tard.
+-- code_badge : 1, 2, 3, 4 maintenant
 CREATE TABLE IF NOT EXISTS badges (
   id INT NOT NULL AUTO_INCREMENT,
   code_badge VARCHAR(50) NOT NULL UNIQUE,
@@ -50,12 +50,3 @@ INSERT INTO badges (code_badge, nom) VALUES
   ('2', 'Badge 2'),
   ('3', 'Badge 3'),
   ('4', 'Badge 4');
-
--- Vue du classement (utilisée par classement.php)
-CREATE OR REPLACE VIEW v_classement AS
-SELECT p.id, p.nom_equipe, p.temps_secondes, COUNT(t.id) AS nb_tentatives
-FROM parties p
-LEFT JOIN tentatives t ON t.id_partie = p.id
-WHERE p.statut = 'gagne'
-GROUP BY p.id, p.nom_equipe, p.temps_secondes
-ORDER BY p.temps_secondes ASC, nb_tentatives ASC;
