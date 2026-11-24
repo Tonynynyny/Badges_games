@@ -1,4 +1,12 @@
 <?php
+
+require_once __DIR__ . '/includes/auth.php';
+
+verifierAdmin();
+
+?>
+
+<?php
 /* =========================================================
  *  Espace animateur : statistiques, parties récentes
  *  (avec le code secret, pour aider un joueur bloqué)
