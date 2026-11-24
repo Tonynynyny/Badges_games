@@ -5,33 +5,57 @@
 --               des badges par défaut pour l'épreuve de l'Escape Game.
 -- ============================================================================
 
--- TODO 1 : Créer la base de données (ex: badges_game) si elle n'existe pas et la sélectionner.
+-- TODO 1 : Base de données
+CREATE DATABASE IF NOT EXISTS badges_game CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE badges_game;
 
+-- TODO 2 : Table badges
+-- Pas de couleur : c'est l'apparence du badge physique, pas du code.
+-- code_badge : 1, 2, 3, 4 maintenant, UID RFID plus tard.
+CREATE TABLE IF NOT EXISTS badges (
+  id INT NOT NULL AUTO_INCREMENT,
+  code_badge VARCHAR(50) NOT NULL UNIQUE,
+  nom VARCHAR(50) NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB;
 
--- TODO 2 : Créer la table `badges` avec exactement ces colonnes :
---   - id          : INT, clé primaire, auto-incrémenté
---   - code_badge  : VARCHAR(50), unique, non nul (ex: 'BADGE_ROUGE' maintenant, UID RFID plus tard)
---   - nom         : VARCHAR(50), non nul (ex: 'Badge Rouge')
---   - couleur     : VARCHAR(20), non nul (ex: '#FF0000' ou 'red' pour l'affichage CSS) pas nécéssaire c que l'apparence du badge, ce n'est pas a mettre dans le code
+-- TODO 3 : Table parties
+-- combinaison_secrete : générée côté serveur, une seule fois.
+-- temps_secondes : date_fin - date_debut, calculé à la victoire.
+CREATE TABLE IF NOT EXISTS parties (
+  id INT NOT NULL AUTO_INCREMENT,
+  nom_equipe VARCHAR(100) NOT NULL,
+  combinaison_secrete VARCHAR(255) NOT NULL,
+  statut ENUM('en_cours', 'gagne', 'abandon') NOT NULL DEFAULT 'en_cours',
+  date_debut DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  date_fin DATETIME NULL,
+  temps_secondes INT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB;
 
+-- TODO 4 : Table tentatives
+CREATE TABLE IF NOT EXISTS tentatives (
+  id INT NOT NULL AUTO_INCREMENT,
+  id_partie INT NOT NULL,
+  combinaison_proposee VARCHAR(255) NOT NULL,
+  nb_corrects INT NOT NULL,
+  date_tentative DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  FOREIGN KEY (id_partie) REFERENCES parties(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
 
--- TODO 3 : Créer la table `parties` avec exactement ces colonnes :
---   - id                   : INT, clé primaire, auto-incrémenté
---   - nom_equipe           : VARCHAR(100), non nul
---   - combinaison_secrete  : VARCHAR(255), non nul (ex: 'BADGE_ROUGE,BADGE_BLEU,BADGE_VERT,BADGE_JAUNE') generer coter server qu'une seul fois
---   - statut               : ENUM('en_cours', 'gagne', 'abandon') DEFAULT 'en_cours'
---   - date_debut           : DATETIME DEFAULT CURRENT_TIMESTAMP
---   - date_fin             : DATETIME NULL
---   - temps_secondes       : INT NULL (durée totale de la partie une fois gagnée) fin - debut
+-- TODO 5 : Badges par défaut (la couleur reste sur le badge physique)
+INSERT INTO badges (code_badge, nom) VALUES
+  ('1', 'Badge 1'),
+  ('2', 'Badge 2'),
+  ('3', 'Badge 3'),
+  ('4', 'Badge 4');
 
-
--- TODO 4 : Créer la table `tentatives` avec exactement ces colonnes :
---   - id                    : INT, clé primaire, auto-incrémenté
---   - id_partie             : INT, non nul (Clé étrangère vers parties.id avec ON DELETE CASCADE)
---   - combinaison_proposee  : VARCHAR(255), non nul (ex: 'BADGE_BLEU,BADGE_ROUGE,BADGE_VERT,BADGE_JAUNE')
---   - nb_corrects           : INT, non nul (nombre de badges bien placés lors de cet essai)
---   - date_tentative        : DATETIME DEFAULT CURRENT_TIMESTAMP
-
-
--- TODO 5 : Insérer un jeu de données initial de 4 à 6 badges dans la table `badges`
--- Exemple de codes attendus : 'BADGE_ROUGE', 'BADGE_BLEU', 'BADGE_VERT', 'BADGE_JAUNE' OU tout simple 1,2,3,4 chaque couleur = un numero, on garde la couleir pour IRL
+-- Vue du classement (utilisée par classement.php)
+CREATE OR REPLACE VIEW v_classement AS
+SELECT p.id, p.nom_equipe, p.temps_secondes, COUNT(t.id) AS nb_tentatives
+FROM parties p
+LEFT JOIN tentatives t ON t.id_partie = p.id
+WHERE p.statut = 'gagne'
+GROUP BY p.id, p.nom_equipe, p.temps_secondes
+ORDER BY p.temps_secondes ASC, nb_tentatives ASC;
