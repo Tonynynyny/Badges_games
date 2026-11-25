@@ -44,11 +44,20 @@ function creerNouvellePartie(PDO $pdo, string $nomEquipe, array$combinaisonSecre
  * @param int $idPartie Identifiant de la partie en cours
  * @return array|null Tableau associatif contenant les infos de la partie, ou null si introuvable
  */
-function recupererPartie(PDO $pdo, int$idPartie): ?array
+function recupererPartie(PDO $pdo, int $idPartie): ?array
 {
-    // TODO (Personne 3) : Faire un SELECT * FROM parties WHERE id = :id et retourner la ligne (ou null).
-    return null;
+    $sql = "SELECT * FROM parties WHERE id = :id";
+
+    $requete = $pdo->prepare($sql);
+    $requete->execute([
+        'id' => $idPartie
+    ]);
+
+    $partie = $requete->fetch(PDO::FETCH_ASSOC);
+
+    return $partie ?: null;
 }
+
 
 /**
  * Enregistre une tentative d'équipe dans la table `tentatives`.
@@ -150,4 +159,23 @@ function reinitialiserToutesLesParties(PDO $pdo): bool
 {
     // TODO (Personne 3) : Vider les tables `tentatives` et `parties` (DELETE ou TRUNCATE).
     return false;
+}
+
+
+function recupererAdminParIdentifiant(PDO $pdo, string $identifiant): ?array
+{
+    $sql = "SELECT *
+            FROM administrateurs
+            WHERE identifiant = :identifiant
+            LIMIT 1";
+
+    $requete = $pdo->prepare($sql);
+
+    $requete->execute([
+        'identifiant' => $identifiant
+    ]);
+
+    $admin = $requete->fetch(PDO::FETCH_ASSOC);
+
+    return $admin ?: null;
 }
