@@ -7,7 +7,7 @@ function verifierAdmin(): void
     }
 
     if (($_SESSION['role'] ?? '') !== 'admin') {
-        header('Location: connexion.php?type=admin');
+        header('Location: index.php?type=admin');
         exit;
     }
 }
@@ -19,7 +19,7 @@ function verifierJoueur(): void
     }
 
     if (($_SESSION['role'] ?? '') !== 'joueur') {
-        header('Location: connexion.php?type=joueur');
+        header('Location: index.php?type=joueur');
         exit;
     }
 }
