@@ -1,6 +1,6 @@
-
 <?php
 
+require_once __DIR__ . '/includes/db.php';
 require_once __DIR__ . '/includes/fonctions.php';
 
 if (session_status() !== PHP_SESSION_ACTIVE) {
@@ -12,7 +12,7 @@ $motDePasse = $_POST['mdp'] ?? '';
 
 // Vérification des champs
 if ($identifiant === '' || $motDePasse === '') {
-    header('Location: connexion.php?type=admin&erreur=identifiants');
+    header('Location: index.php?type=admin&erreur=identifiants');
     exit;
 }
 
@@ -24,16 +24,18 @@ if (
     $admin === null ||
     !password_verify($motDePasse, $admin['mot_de_passe'])
 ) {
-    header('Location: connexion.php?type=admin&erreur=identifiants');
+    header('Location: index.php?type=admin&erreur=identifiants');
     exit;
 }
 
-// Connexion réussie
+// Connexion réussie (on repart d'une session propre)
 session_regenerate_id(true);
 
-$_SESSION['role'] = 'admin';
-$_SESSION['id_admin'] = (int) $admin['id'];
-$_SESSION['identifiant_admin'] = $admin['identifiant'];
+$_SESSION = [
+    'role'              => 'admin',
+    'id_admin'          => (int) $admin['id'],
+    'identifiant_admin' => $admin['identifiant'],
+];
 
 // Redirection vers l'administration
 header('Location: admin.php');
