@@ -26,12 +26,17 @@ CREATE TABLE IF NOT EXISTS parties (
   id INT NOT NULL AUTO_INCREMENT,
   nom_equipe VARCHAR(100) NOT NULL,
   combinaison_secrete VARCHAR(255) NOT NULL,
-  statut ENUM('en_cours', 'gagne', 'abandon') NOT NULL DEFAULT 'en_cours',
+  statut ENUM('en_attente', 'en_cours', 'gagne', 'abandon') NOT NULL DEFAULT 'en_attente',
   date_debut DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   date_fin DATETIME NULL,
   temps_secondes INT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB;
+
+-- Mise à jour d'une base déjà créée avec l'ancienne version du script
+-- en_attente : équipe créée par l'animateur, le chrono n'a pas encore démarré.
+ALTER TABLE parties
+  MODIFY statut ENUM('en_attente', 'en_cours', 'gagne', 'abandon') NOT NULL DEFAULT 'en_attente';
 
 -- TODO 4 : Table tentatives
 CREATE TABLE IF NOT EXISTS tentatives (
@@ -45,15 +50,24 @@ CREATE TABLE IF NOT EXISTS tentatives (
 ) ENGINE=InnoDB;
 
 -- TODO 5 : Badges par défaut (la couleur reste sur le badge physique)
-INSERT INTO badges (code_badge, nom) VALUES
+-- INSERT IGNORE : le script peut être relancé sans erreur de doublon.
+INSERT IGNORE INTO badges (code_badge, nom) VALUES
   ('1', 'Badge 1'),
   ('2', 'Badge 2'),
   ('3', 'Badge 3'),
   ('4', 'Badge 4');
 
+-- TODO 6 : Comptes animateur
 CREATE TABLE IF NOT EXISTS administrateurs (
     id INT PRIMARY KEY AUTO_INCREMENT,
     identifiant VARCHAR(100) NOT NULL UNIQUE,
     mot_de_passe VARCHAR(255) NOT NULL,
     date_creation DATETIME DEFAULT CURRENT_TIMESTAMP
-);
+) ENGINE=InnoDB;
+
+-- Compte animateur par défaut :
+--   identifiant  : animateur
+--   mot de passe : ChangeCeMotDePasse123!   (hash bcrypt ci-dessous)
+-- Changez-le avant l'intervention avec cree_admin_temporaire.php
+INSERT IGNORE INTO administrateurs (identifiant, mot_de_passe) VALUES
+  ('animateur', '$2y$10$JtaJn7pALiH4Iz5IVJOIZu7bNXvSzxsIFPGkrAdD9CotceKEBFD7e');
